@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 const images = [
   {
     src : '/assest/y5.jpg',
-    title : 'AI-driven diagnostics'
+    title : ''
   },
   {
     src : '/assest/y1.jpg',
@@ -11,7 +11,7 @@ const images = [
   },
   {
     src : '/assest/y2.webp',
-    title : 'satellite-based deforestation monitoring'
+    title : ''
   },
   {
     src : '/assest/y3.jpg',

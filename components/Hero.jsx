@@ -7,22 +7,22 @@ const Hero = () => {
         <div className="bg-gray-100 min-h-screen">
 
             {/* Main Content */}
-            <main className="container mx-auto px-6">
+            <main className="flex justify-center items-center flex-col px-6">
                 <div className="flex flex-col md:flex-row items-center">
                     <div className="md:w-1/2">
                         <h1 className="text-6xl font-bold text-gray-800 leading-tight">
-                            Fitness &<br />Health Training
+                            Fitness &<br />Welness Training
                         </h1>
                         <p className="mt-4 text-gray-600">
                             Strong is the simplest, most intuitive workout tracking experience. Trusted by over 3 million users worldwide.
                         </p>
-                        <button className="mt-6 bg-orange-500 text-white py-3 px-6 rounded-full text-lg font-semibold">
+                        <Link href={'/user-dashboard'}><button className="mt-6 bg-orange-500 text-white py-3 px-6 rounded-full text-lg font-semibold">
                             Get Started
-                        </button>
+                        </button></Link>
                     </div>
-                    <div className="md:w-[28rem] mt-10 md:mt-0">
+                    <div className="md:w-[28rem] mt-10 md:mt-0 ml-20">
                         <img
-                            src="/assest/shiva.jpg"
+                            src="/assest/shiva.png"
                             alt="Person exercising with dumbbells"
                             className="w-full"
                         />
