@@ -1,6 +1,9 @@
+'use client'
 import React from "react";
 import Link from "next/link";
+import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
 function Header() {
+  const { isSignedIn } = useAuth();
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
@@ -30,11 +33,7 @@ function Header() {
           </Link>
         </nav>
         <div className="flex items-center">
-          <img
-            src="https://placehold.co/40x40"
-            alt="User avatar"
-            className="h-10 w-10 rounded-full"
-          />
+          {!isSignedIn ? <SignInButton></SignInButton> : <UserButton></UserButton>}
         </div>
       </div>
     </header>
