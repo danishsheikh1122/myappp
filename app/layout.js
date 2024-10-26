@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider dynamic>
     <html lang="en">
       <body className={inter.className}>
       <GoogleOAuthProvider clientId='612223079143-al5fk3306vsbe5pauhoa65p933884492.apps.googleusercontent.com'>

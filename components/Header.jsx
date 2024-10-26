@@ -25,7 +25,7 @@ function Header() {
           <Link href="/virtual-meeetups" className="text-gray-600">
             Virtual Meetups
           </Link>
-          <Link href="/virtual-meeetups" className="text-gray-600">
+          <Link href="/games" className="text-gray-600">
             Games and Puzzles
           </Link>
           <Link href="/virtual-meeetups" className="text-gray-600">
