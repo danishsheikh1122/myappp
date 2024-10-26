@@ -16,7 +16,7 @@ function Header() {
                         <a href="#" className="text-gray-800 font-semibold">Home</a>
                         <Link href="/user-dashboard" className="text-gray-600">DashBoard</Link>
                         <Link href="/virtual-meeetups" className="text-gray-600">Virtual Meetups</Link>
-                        <Link href="/virtual-meeetups" className="text-gray-600">Games and Puzzles</Link>
+                        <Link href="/yogavr" className="text-gray-600">Games and Puzzles</Link>
                         <Link href="/virtual-meeetups" className="text-gray-600">Certifications and Badges</Link>
                     </nav>
                     <div className="flex items-center">
