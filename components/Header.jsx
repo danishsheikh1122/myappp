@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import Link from "next/link";
-import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
+import { SignInButton, useAuth, UserButton} from "@clerk/nextjs";
 function Header() {
   const { isSignedIn } = useAuth();
   return (
