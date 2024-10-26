@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import React from 'react';
+import { Cards } from './Cards';
 
 const Hero = () => {
     return (
         <div className="bg-gray-100 min-h-screen">
 
             {/* Main Content */}
-            <main className="container mx-auto mt-10 px-6">
+            <main className="container mx-auto px-6">
                 <div className="flex flex-col md:flex-row items-center">
                     <div className="md:w-1/2">
                         <h1 className="text-6xl font-bold text-gray-800 leading-tight">
@@ -19,9 +20,9 @@ const Hero = () => {
                             Get Started
                         </button>
                     </div>
-                    <div className="md:w-1/2 mt-10 md:mt-0">
+                    <div className="md:w-[28rem] mt-10 md:mt-0">
                         <img
-                            src="https://placehold.co/600x400"
+                            src="/assest/shiva.jpg"
                             alt="Person exercising with dumbbells"
                             className="w-full"
                         />
@@ -35,6 +36,7 @@ const Hero = () => {
                     <Statistic value="100+" label="Workout Type" />
                 </div>
             </main>
+            <Cards/>
         </div>
     );
 };
