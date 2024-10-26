@@ -8,7 +8,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, BarChart } from "recharts"
 import { Activity, Calendar, CreditCard, Dumbbell, Users, Video } from "lucide-react"
-
+import { useUser } from '@clerk/nextjs'
+import Link from 'next/link'
 // Sample data for charts
 const weeklyActivityData = [
   { day: "Mon", steps: 5000, duration: 30 },
@@ -26,19 +27,29 @@ const monthlyPointsData = [
   { week: "Week 3", points: 120 },
   { week: "Week 4", points: 180 },
 ];
+const weeklyBPData = [
+  { day: "Monday", systolic: 120, diastolic: 80 },
+  { day: "Tuesday", systolic: 118, diastolic: 82 },
+  { day: "Wednesday", systolic: 122, diastolic: 78 },
+  { day: "Thursday", systolic: 125, diastolic: 80 },
+  { day: "Friday", systolic: 119, diastolic: 79 },
+  { day: "Saturday", systolic: 124, diastolic: 81 },
+  { day: "Sunday", systolic: 121, diastolic: 77 },
+];
+
 
 export default function UserDashboard() {
+  const { user } = useUser();
   const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Welcome, Sarah!</h1>
+      <h1 className="text-3xl font-bold mb-8">Welcome, {user?.firstName}!</h1>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="exercise">Exercise</TabsTrigger>
-          <TabsTrigger value="meetings">Meetings</TabsTrigger>
+          <TabsTrigger value="overview">Progress Tracking</TabsTrigger>
+          <TabsTrigger value="exercise">Report</TabsTrigger>
           <TabsTrigger value="vr">VR Testing</TabsTrigger>
         </TabsList>
 
@@ -47,8 +58,9 @@ export default function UserDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
               { title: "Weekly Steps", value: "45,231", progress: 75, icon: <Dumbbell /> },
+              { title: "Average BP ", value: "45", progress: 75, icon: <Dumbbell /> },
               { title: "Active Minutes", value: "325 min", progress: 65, icon: <Activity /> },
-              { title: "Upcoming Meetings", value: "3", info: "Next: Book Club (Tomorrow)", icon: <Users /> },
+              // { title: "Upcoming Meetings", value: "3", info: "Next: Book Club (Tomorrow)", icon: <Users /> },
               { title: "Weekly Points", value: "550", progress: 87, info: "80 points to next level", icon: <CreditCard /> },
             ].map(({ title, value, progress, info, icon }, index) => (
               <Card key={index}>
@@ -69,7 +81,7 @@ export default function UserDashboard() {
             <CardHeader>
               <CardTitle>Weekly Activity Overview</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex gap-4">
               <ChartContainer
                 config={{
                   steps: { label: "Steps", color: "hsl(var(--chart-1))" },
@@ -87,6 +99,26 @@ export default function UserDashboard() {
                     <Legend />
                     <Line yAxisId="left" type="monotone" dataKey="steps" stroke="var(--color-steps)" name="Steps" />
                     <Line yAxisId="right" type="monotone" dataKey="duration" stroke="var(--color-duration)" name="Active Minutes" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </ChartContainer>
+              {/* bp chart  */}
+              <ChartContainer
+                config={{
+                  systolic: { label: "Systolic BP", color: "hsl(var(--chart-3))" },
+                  diastolic: { label: "Diastolic BP", color: "hsl(var(--chart-4))" },
+                }}
+                className="h-[300px] mt-6"
+              >
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={weeklyBPData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="day" />
+                    <YAxis yAxisId="left" />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Legend />
+                    <Line yAxisId="left" type="monotone" dataKey="systolic" stroke="var(--color-systolic)" name="Systolic BP" />
+                    <Line yAxisId="left" type="monotone" dataKey="diastolic" stroke="var(--color-diastolic)" name="Diastolic BP" />
                   </LineChart>
                 </ResponsiveContainer>
               </ChartContainer>
@@ -140,61 +172,33 @@ export default function UserDashboard() {
             </CardContent>
           </Card>
         </TabsContent>
-
-        {/* Meetings Tab */}
-        <TabsContent value="meetings" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Upcoming Meetings</CardTitle>
-              <CardDescription>Your scheduled virtual meetups</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                {[
-                  { title: "Book Club Discussion", time: "Tomorrow, 3:00 PM" },
-                  { title: "Yoga for Seniors", time: "Thursday, 10:00 AM" },
-                  { title: "Gardening Tips Exchange", time: "Saturday, 2:00 PM" },
-                ].map(({ title, time }, index) => (
-                  <li key={index} className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold">{title}</h3>
-                      <p className="text-sm text-muted-foreground">{time}</p>
-                    </div>
-                    <Button size="sm">
-                      <Video className="mr-2 h-4 w-4" />
-                      Join
-                    </Button>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Past Meetings</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                {[
-                  { title: "Virtual Coffee Chat", time: "Monday, 11:00 AM" },
-                  { title: "Meditation Session", time: "Last Friday, 9:00 AM" },
-                ].map(({ title, time }, index) => (
-                  <li key={index} className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-semibold">{title}</h3>
-                      <p className="text-sm text-muted-foreground">{time}</p>
-                    </div>
-                    <Button variant="outline" size="sm">View Recording</Button>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         {/* VR Testing Tab */}
         <TabsContent value="vr" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>VR Testing Features</CardTitle>
+              <CardDescription>Explore virtual reality experiences</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-4">
+                <li className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold">Virtual Nature Walk</h3>
+                    <p className="text-sm text-muted-foreground">Immerse yourself in a peaceful forest</p>
+                  </div>
+                  <Link href={'/VRYogaRoom'}><Button>Start Experience</Button></Link>
+                </li>
+                <li className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-semibold">Memory Lane</h3>
+                    <p className="text-sm text-muted-foreground">Revisit your favorite places</p>
+                  </div>
+                  <Link href={'/VRYogaRoom'}> <Button>Start Experience</Button></Link>
+                </li>
+
+              </ul>
+            </CardContent>
+          </Card>
           <Card>
             <CardHeader>
               <CardTitle>VR Experience Feedback</CardTitle>

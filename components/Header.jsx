@@ -9,11 +9,11 @@ function Header() {
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         <div className="flex items-center">
           <img
-            src="https://placehold.co/40x40"
+            src="/assest/shiva.png"
             alt="Athleticon logo"
-            className="h-10 w-10"
+            className="h-14 w-10"
           />
-          <span className="ml-2 text-xl font-bold">Athleticon</span>
+          <span className="ml-2 text-xl font-bold">Wellness360</span>
         </div>
         <nav className="flex space-x-6">
           <Link href="/" className="text-gray-600">
@@ -26,10 +26,10 @@ function Header() {
             Virtual Meetups
           </Link>
           <Link href="/virtual-meeetups" className="text-gray-600">
-            Games and Puzzles
+            Games & Puzzles
           </Link>
-          <Link href="/virtual-meeetups" className="text-gray-600">
-            Certifications and Badges
+          <Link href="/certificates" className="text-gray-600">
+            Achhivements
           </Link>
         </nav>
         <div className="flex items-center">
