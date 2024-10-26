@@ -14,14 +14,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          <GoogleOAuthProvider clientId="612223079143-al5fk3306vsbe5pauhoa65p933884492.apps.googleusercontent.com">
-            <Header />
-            {children}
-          </GoogleOAuthProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className={inter.className}>
+      <GoogleOAuthProvider clientId='612223079143-al5fk3306vsbe5pauhoa65p933884492.apps.googleusercontent.com'>
+        <Header />
+        {children}
+      </GoogleOAuthProvider>
+      </body>
+    </html>
+ </ClerkProvider>
   );
 }
