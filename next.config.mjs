@@ -1,14 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    webpack(config) {
-        // Add a rule for loading HTML files
-        config.module.rules.push({
-            test: /\.html$/,
-            use: 'html-loader', // Use the html-loader for HTML files
-        });
-
-        return config;
+    images: {
+      domains: ['img.clerk.com'], // Add any other domains you need
     },
-};
-
-export default nextConfig;
+  };
+  
+ export default nextConfig; // Properly export the nextConfig object
+  
