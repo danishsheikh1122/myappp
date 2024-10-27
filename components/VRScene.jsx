@@ -1,5 +1,19 @@
-'use client'
-import React from 'react';
+// 'use client'
+// import React from 'react';
+// import 'aframe';
+// import './js/aframe-environment-component';
+// import './js/controller-listener';
+// import './js/player-move';
+// import './js/raycaster-extras';
+// import './js/animation-mixer';
+// import './js/mmdparser';
+// import './js/CCDIKSolver';
+// import './js/BVHLoader';
+// import './js/MMDLoader';
+// import './js/aframe-vrm';
+
+'use client';
+import React, { useEffect } from 'react';
 import 'aframe';
 import './js/aframe-environment-component';
 import './js/controller-listener';
@@ -11,6 +25,8 @@ import './js/CCDIKSolver';
 import './js/BVHLoader';
 import './js/MMDLoader';
 import './js/aframe-vrm';
+
+
 
 function VRScene() {
     return (
