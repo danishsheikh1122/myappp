@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -8,10 +8,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, BarChart } from "recharts"
 import { Activity, Calendar, CreditCard, Dumbbell, Users, Video } from "lucide-react"
-import { useUser } from '@clerk/nextjs'
+import {  useUser } from '@clerk/nextjs'
+import UserProfile from '../components/UserProfile'
 import { chatSession } from "../utils/gemini";
 import Link from 'next/link'
-import toast from "react-hot-toast"
+import toast, { Toaster } from "react-hot-toast"
+import axios from "axios"
 // Sample data for charts
 const weeklyActivityData = [
   { day: "Mon", steps: 5000, duration: 30 },
@@ -42,6 +44,28 @@ const weeklyBPData = [
 
 export default function UserDashboard() {
   const { user } = useUser();
+  const [points,setPoints] = useState(0);
+  const fetchUserData = async () => {
+    try {
+      console.log(user.id)
+      const response = await axios.get(`/api/users?userId=${user.id}`);
+      if (response.data && response.data.points !== undefined) {
+        console.log('Points:', response.data.points);
+        setPoints(response.data.points);
+      } else {
+        console.warn('Points not found in the response:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+      toast.error('Failed to fetch user data.');
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchUserData();
+    }
+  }, [user]);
   const [activeTab, setActiveTab] = useState("overview");
   const [report, setReport] = useState("");
   const handleGenerateReport = async () => {
@@ -75,9 +99,10 @@ JSON format only.`;
   }
   return (
     <div className="container mx-auto px-4 py-8">
+              <Toaster/>
       <div className="w-full flex justify-between items-center">
         <h1 className="text-3xl font-bold mb-8">Welcome, {user?.firstName}!</h1>
-        <span className="text-green-500 font-bold text-3xl mr-20">100 Points </span>
+        <span className="text-green-500 font-bold text-3xl mr-20">{points} Points </span>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
@@ -85,8 +110,11 @@ JSON format only.`;
           <TabsTrigger value="overview">Progress Tracking</TabsTrigger>
           <TabsTrigger value="exercise">Report</TabsTrigger>
           <TabsTrigger value="vr">VR Testing</TabsTrigger>
+          <TabsTrigger value="profile">Profile</TabsTrigger>
         </TabsList>
-
+        <TabsContent value="profile" className="space-y-4">
+          <UserProfile/>
+        </TabsContent>
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

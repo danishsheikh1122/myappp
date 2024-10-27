@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <title>A-Frame Examples</title>
-    <meta name="description" content="Testing VRM Avatars">
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgo=">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <head>
+    <title>Welness360</title>
+    <meta name="description" content="Testing VRM Avatars" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="data:image/png;base64,iVBORw0KGgo="
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
     <script src="./js/aframe-v1.3.0.js"></script>
     <script src="./js/aframe-environment-component.js"></script>
     <script src="./js/controller-listener.js"></script>
@@ -18,203 +24,284 @@
     <script src="./js/BVHLoader.js"></script>
     <script src="./js/MMDLoader.js"></script>
     <script src="./js/aframe-vrm.js"></script>
-</head>
-<style>
+  </head>
+  <style>
     .btn {
-        z-index: 999;
-        position: absolute;
-        bottom: 80px;
-        right: 200px;
-        border-radius: 20px;
-        background-color: black;
-        color: white;
-        padding: 14px 20px;
-		border: 1px solid white;
-        cursor: pointer;
+      z-index: 999;
+      position: absolute;
+      bottom: 80px;
+      right: 200px;
+      border-radius: 20px;
+      background-color: black;
+      color: white;
+      padding: 14px 20px;
+      border: 1px solid white;
+      cursor: pointer;
+    }
+    .btn2 {
+      z-index: 999;
+      position: absolute;
+      bottom: 20px;
+      right: 180px;
+      border-radius: 20px;
+      background-color: black;
+      color: white;
+      padding: 14px 20px;
+      border: 1px solid white;
+      cursor: pointer;
     }
     body {
-        position: relative;
-		height: 100vh;
-
+      position: relative;
+      height: 100vh;
     }
-	#textInput,#speakButton{
-		display: none;
-	}
-	#voiceSelect{
-		position: relative;
-		padding: 6px;
-		z-index: 999;
-        top: 90vh;
-        left: 10px;
-        cursor: pointer;
-	}
-	.mic-icon {
-        margin-left: 8px; /* Space between icon and text */
+    #textInput,
+    #speakButton {
+      display: none;
     }
-</style>
+    #voiceSelect {
+      position: relative;
+      padding: 6px;
+      z-index: 999;
+      top: 90vh;
+      left: 10px;
+      cursor: pointer;
+    }
+    .mic-icon {
+      margin-left: 8px; /* Space between icon and text */
+    }
+  </style>
 
-<body>
+  <body>
+    <!-- Add controls for voice selection and text input -->
+    <div style="position: absolute; top: 20px; left: 20px; z-index: 1000">
+      <select id="voiceSelect"></select>
+      <textarea
+        id="textInput"
+        placeholder="Speak here..."
+        rows="4"
+        cols="50"
+      ></textarea>
+      <button id="speakButton">Speak Text</button>
+    </div>
 
-<!-- Add controls for voice selection and text input -->
-<div style="position: absolute; top: 20px; left: 20px; z-index: 1000;">
-    <select id="voiceSelect"></select>
-    <textarea id="textInput" placeholder="Speak here..." rows="4" cols="50"></textarea>
-    <button id="speakButton">Speak Text</button>
-</div>
+    <button class="btn" id="recordButton">
+      Speak <i class="fas fa-microphone mic-icon"></i>
+    </button>
+    <button class="btn2">
+      <a href="http://localhost:3000/" target="_blank"> Go to HomePage </a>
+    </button>
 
-<button class="btn" id="recordButton">
-	Speak   <i class="fas fa-microphone mic-icon"></i> 
-</button>
+    <script>
+      let speech = new SpeechSynthesisUtterance();
+      let voices = [];
+      let voiceSelect = document.getElementById("voiceSelect");
+      let textarea = document.getElementById("textInput");
+      let recordButton = document.getElementById("recordButton");
+      let speakButton = document.getElementById("speakButton");
 
-<script>
-    let speech = new SpeechSynthesisUtterance();
-    let voices = [];
-    let voiceSelect = document.getElementById("voiceSelect");
-    let textarea = document.getElementById("textInput");
-    let recordButton = document.getElementById("recordButton");
-    let speakButton = document.getElementById("speakButton");
-
-    // Populate the voices in the select dropdown
-    function populateVoices() {
+      // Populate the voices in the select dropdown
+      function populateVoices() {
         voices = window.speechSynthesis.getVoices();
         voiceSelect.innerHTML = ""; // Clear existing options
         voices.forEach((voice, index) => {
-            let option = new Option(`${voice.name} (${voice.lang})`, index);
-            voiceSelect.add(option);
+          let option = new Option(`${voice.name} (${voice.lang})`, index);
+          voiceSelect.add(option);
         });
-    }
+      }
 
-    // Load voices when available
-    window.speechSynthesis.onvoiceschanged = populateVoices;
+      // Load voices when available
+      window.speechSynthesis.onvoiceschanged = populateVoices;
 
-    // Text-to-Speech (TTS) functionality
-    speakButton.addEventListener("click", () => {
+      // Text-to-Speech (TTS) functionality
+      speakButton.addEventListener("click", () => {
         speech.text = textarea.value;
         let selectedVoiceIndex = voiceSelect.value;
         if (voices[selectedVoiceIndex]) {
-            speech.voice = voices[selectedVoiceIndex];
+          speech.voice = voices[selectedVoiceIndex];
         }
         window.speechSynthesis.cancel(); // Clear previous speech queue
         window.speechSynthesis.speak(speech);
-    });
+      });
 
-    // Speech-to-Text (STT) functionality
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'hi-IN'; // Set the language for recognition
-    recognition.interimResults = false; // Complete results only
-    recognition.maxAlternatives = 1;
+      // Speech-to-Text (STT) functionality
+      const recognition = new (window.SpeechRecognition ||
+        window.webkitSpeechRecognition)();
+      recognition.lang = "hi-IN"; // Set the language for recognition
+      recognition.interimResults = false; // Complete results only
+      recognition.maxAlternatives = 1;
 
-    // Start voice recognition on button click
-    recordButton.addEventListener("click", () => {
-        console.log('clicked');
+      // Start voice recognition on button click
+      recordButton.addEventListener("click", () => {
+        console.log("clicked");
         recognition.start();
-    });
+      });
 
-    // Populate textarea with recognized speech text and respond with "ok"
-    recognition.onresult = async (event) => {
-		console.log(event.results);
-		
+      // Populate textarea with recognized speech text and respond with "ok"
+      recognition.onresult = async (event) => {
+        console.log(event.results);
+
         const transcript = event.results[0][0].transcript;
-		console.log(event.results[0][0].transcript)
+        console.log(event.results[0][0].transcript);
         textarea.value = transcript;
         console.log(transcript);
 
         // Send the transcript to the API
         try {
-            const response = await fetch('https://fashion-chatbot-production.up.railway.app/classify/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ text: transcript }), // Adjust based on API requirements
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                
-                // Extract the classified_category and Describe from the response
-                let classifiedCategory = data.classified_category || "Unknown category";
-                const describe = data.Describe || "No description available.";
-
-                // Display the response in a user-friendly manner
-                // alert(`Category: ${classifiedCategory}\nDescription: ${describe}`);
-                
-                // Optionally, speak the response
-                let responseSpeech = new SpeechSynthesisUtterance(describe);
-                window.speechSynthesis.speak(responseSpeech);
-				switch (classifiedCategory) {
-                        case 'Dashboard':
-                            classifiedCategory = 'user-dashboard';
-                            break;
-                        case 'Meet':
-                            classifiedCategory = 'virtual-meeetups';
-                            break;
-                        case 'Achievements':
-                            classifiedCategory = 'certificates';
-                            break;
-                        case 'Games&Puzzles':
-                            classifiedCategory = 'Games';
-                            break;
-						default:
-							classifiedCategory = '';
-                    }
-				window.location.href = `http://localhost:3000/${classifiedCategory}`;
-            } else {
-                console.error("Error in API request:", response.statusText);
+          const response = await fetch(
+            "https://fashion-chatbot-production.up.railway.app/classify/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ text: transcript }), // Adjust based on API requirements
             }
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+
+            // Extract the classified_category and Describe from the response
+            let classifiedCategory =
+              data.classified_category || "Unknown category";
+            const describe = data.Describe || "No description available.";
+
+            // Display the response in a user-friendly manner
+            // alert(`Category: ${classifiedCategory}\nDescription: ${describe}`);
+
+            // Optionally, speak the response
+            let responseSpeech = new SpeechSynthesisUtterance(describe);
+            window.speechSynthesis.speak(responseSpeech);
+            switch (classifiedCategory) {
+              case "Dashboard":
+                classifiedCategory = "user-dashboard";
+                break;
+              case "Meet":
+                classifiedCategory = "virtual-meeetups";
+                break;
+              case "Achievements":
+                classifiedCategory = "certificates";
+                break;
+              case "Games&Puzzles":
+                classifiedCategory = "Games";
+                break;
+              default:
+                classifiedCategory = "";
+            }
+            window.location.href = `http://localhost:3000/${classifiedCategory}`;
+          } else {
+            console.error("Error in API request:", response.statusText);
+          }
         } catch (error) {
-            console.error("Fetch error:", error);
+          console.error("Fetch error:", error);
         }
 
         // Respond with "ok"
         // let response = new SpeechSynthesisUtterance("ok, I'm redirecting you to the dashboard");
         // window.speechSynthesis.speak(response);
-    };
+      };
 
-    // Error handling for recognition
-    recognition.onerror = (event) => {
+      // Error handling for recognition
+      recognition.onerror = (event) => {
         console.error("Speech recognition error:", event.error);
-    };
-</script>
+      };
+    </script>
 
-
-
-<a-scene environment="preset: default; fog: 0; playArea: 1.0; groundYScale: 5.00; groundTexture: walkernoise; groundColor: #002200; groundColor2: #003300">
-    
-    <a-assets>
+    <a-scene
+      environment="preset: default; fog: 0; playArea: 1.0; groundYScale: 5.00; groundTexture: walkernoise; groundColor: #002200; groundColor2: #003300"
+    >
+      <a-assets>
         <!-- all model files from Poly by Google (with texture modifications to reduce file size and increase brightness) -->
-        <a-asset-item id="pine" src="./models/trees/PineTree.gltf"></a-asset-item>
+        <a-asset-item
+          id="pine"
+          src="./models/trees/PineTree.gltf"
+        ></a-asset-item>
         <a-asset-item id="ash" src="./models/trees/AshTree.gltf"></a-asset-item>
         <a-asset-item id="elm" src="./models/trees/ElmTree.gltf"></a-asset-item>
         <a-asset-item id="oak" src="./models/trees/OakTree.gltf"></a-asset-item>
-        <a-asset-item id="sycamore" src="./models/trees/SycamoreTree.gltf"></a-asset-item>
+        <a-asset-item
+          id="sycamore"
+          src="./models/trees/SycamoreTree.gltf"
+        ></a-asset-item>
         <a-asset-item id="shrub" src="./models/Shrub.gltf"></a-asset-item>
         <a-asset-item id="parrot" src="./models/Parrot.glb"></a-asset-item>
-    </a-assets>
-    
-    <a-entity gltf-model="#ash" position="-12 0 -15" rotation="0 0 0" scale="0.4 0.5 0.5"></a-entity>
-    <a-entity gltf-model="#sycamore" position="-5 0 -15" rotation="0 0 0" scale="0.4 0.5 0.5"></a-entity>
-    <a-entity gltf-model="#pine" position="0 0 -15" rotation="0 30 0" scale="0.5 0.5 0.5"></a-entity>
-    <a-entity gltf-model="#oak" position="6 0 -15" rotation="0 30 0" scale="0.5 0.5 0.5"></a-entity>
-    <a-entity gltf-model="#elm" position="12 0 -15" rotation="0 30 0" scale="0.4 0.4 0.4"></a-entity>
-    <a-entity gltf-model="#shrub" position="1 0 -10" rotation="0 0 0" scale="0.30 0.30 0.30"></a-entity>
-    <a-entity gltf-model="#parrot" position="0 2 -3" rotation="0 90 0" scale="0.01 0.01 0.01" animation-mixer="loop: repeat"></a-entity>
+      </a-assets>
 
-    <a-entity vrm="src: models/avatar.vrm;" 
-        vrm-anim="src: models/normal-walk.vmd;"  
+      <a-entity
+        gltf-model="#ash"
+        position="-12 0 -15"
+        rotation="0 0 0"
+        scale="0.4 0.5 0.5"
+      ></a-entity>
+      <a-entity
+        gltf-model="#sycamore"
+        position="-5 0 -15"
+        rotation="0 0 0"
+        scale="0.4 0.5 0.5"
+      ></a-entity>
+      <a-entity
+        gltf-model="#pine"
+        position="0 0 -15"
+        rotation="0 30 0"
+        scale="0.5 0.5 0.5"
+      ></a-entity>
+      <a-entity
+        gltf-model="#oak"
+        position="6 0 -15"
+        rotation="0 30 0"
+        scale="0.5 0.5 0.5"
+      ></a-entity>
+      <a-entity
+        gltf-model="#elm"
+        position="12 0 -15"
+        rotation="0 30 0"
+        scale="0.4 0.4 0.4"
+      ></a-entity>
+      <a-entity
+        gltf-model="#shrub"
+        position="1 0 -10"
+        rotation="0 0 0"
+        scale="0.30 0.30 0.30"
+      ></a-entity>
+      <a-entity
+        gltf-model="#parrot"
+        position="0 2 -3"
+        rotation="0 90 0"
+        scale="0.01 0.01 0.01"
+        animation-mixer="loop: repeat"
+      ></a-entity>
+
+      <a-entity
+        vrm="src: models/avatar.vrm;"
+        vrm-anim="src: models/normal-walk.vmd;"
         position="0 0 -1"
         rotation="0 180 0"
         vrm-test
-        shadow="cast: true; receive: false;">
-    </a-entity>
+        shadow="cast: true; receive: false;"
+      >
+      </a-entity>
 
-    <a-entity id="player" position="0 0 1" player-move="controllerListenerId: #controller-data; navigationMeshClass: environmentGround;">
+      <a-entity
+        id="player"
+        position="0 0 1"
+        player-move="controllerListenerId: #controller-data; navigationMeshClass: environmentGround;"
+      >
         <a-camera></a-camera>
-        <a-entity id="controller-data" controller-listener="leftControllerId:  #left-controller; rightControllerId: #right-controller;"></a-entity>
-        <a-entity id="left-controller" oculus-touch-controls="hand: left"></a-entity>
-        <a-entity id="right-controller" oculus-touch-controls="hand: right" raycaster="objects: .raycaster-target, .environmentGround;" raycaster-extras="controllerListenerId: #controller-data; beamImageSrc: #gradient; beamLength: 0.5;"></a-entity>
-    </a-entity>
-</a-scene>
-
-</body>
+        <a-entity
+          id="controller-data"
+          controller-listener="leftControllerId:  #left-controller; rightControllerId: #right-controller;"
+        ></a-entity>
+        <a-entity
+          id="left-controller"
+          oculus-touch-controls="hand: left"
+        ></a-entity>
+        <a-entity
+          id="right-controller"
+          oculus-touch-controls="hand: right"
+          raycaster="objects: .raycaster-target, .environmentGround;"
+          raycaster-extras="controllerListenerId: #controller-data; beamImageSrc: #gradient; beamLength: 0.5;"
+        ></a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
 </html>
