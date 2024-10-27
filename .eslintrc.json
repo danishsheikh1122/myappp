@@ -1,16 +1,16 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-      "@next/next/no-assign-module-variable": "off",
-      "react/display-name": "off",
-      "no-invalid-this": "off"  // Optionally ignore 'this' warnings
+    "@next/next/no-assign-module-variable": "off", // Disable specific Next.js rule
+    "react/display-name": "off", // Disable warning for missing display names in React components
+    "no-invalid-this": "off" // Optionally ignore 'this' warnings
   },
   "overrides": [
-      {
-          "files": ["*.min.js"],
-          "rules": {
-              "no-invalid-this": "off"  // Disable for minified files
-          }
+    {
+      "files": ["*.min.js"], // Target all minified JavaScript files
+      "rules": {
+        "no-invalid-this": "off" // Disable 'this' warnings specifically for minified files
       }
+    }
   ]
 }
