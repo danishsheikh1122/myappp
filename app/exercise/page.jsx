@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const ExercisePage = () => {
   const [categories, setCategories] = useState([]);
@@ -40,7 +41,7 @@ const ExercisePage = () => {
               <ul className="flex flex-wrap justify-center items-center gap-2 space-y-2 ml-4">
                 {category.poses.map((pose) => (
                     <Link 
-                    key={pose}
+                    key={pose.id}
                       href={{
                         pathname: `/pose/${pose.id}`,
                         query: {
@@ -52,7 +53,7 @@ const ExercisePage = () => {
                     >
                   <li key={pose.id} className="w-44 h-48 flex bg-gray-100 rounded-lg flex-col items-center justify-center border">
                      <span className='font-bold'>{pose.sanskrit_name_adapted}</span>
-                    <img src={pose.url_png} className='w-20' alt="image" />
+                    <Image width={20} height={20} src={pose.url_png} className='w-20' alt="image" />
                     <span className="ml-2 text-sm text-gray-500 italic">({pose.sanskrit_name})</span>
                   </li>
                     </Link>

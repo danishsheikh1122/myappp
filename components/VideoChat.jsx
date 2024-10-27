@@ -33,6 +33,7 @@ const VideoChat = ({ roomId }) => {
     return () => {
       socketIo.disconnect();
     };
+  /* trunk-ignore(eslint/react-hooks/exhaustive-deps) */
   }, []);
 
   function handleUserJoined(userId) {

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { Cards } from './Cards';
+import Image from 'next/image';
 
 const Hero = () => {
     return (
@@ -21,7 +22,10 @@ const Hero = () => {
                         </button></Link>
                     </div>
                     <div className="md:w-[28rem] mt-10 md:mt-0 ml-20">
-                        <img
+
+                        <Image
+                            width={50}
+                            height={50}
                             src="/assest/shiva.png"
                             alt="Person exercising with dumbbells"
                             className="w-full"

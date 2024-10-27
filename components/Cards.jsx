@@ -1,4 +1,5 @@
 'use client'
+import Image from "next/image";
 import React, { useState, useEffect } from "react";
 const images = [
   {
@@ -42,7 +43,9 @@ export const Cards = () => {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              <img
+              <Image
+              width={100}
+              height={100}
                 src={image.src}
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover"

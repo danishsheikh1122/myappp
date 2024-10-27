@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Award, Download, Share2 } from "lucide-react";
 import CustomCard from "@/components/CustomCard"; // Import your custom card component
+import Image from "next/image";
 
 // Sample data for certifications and badges
 const certifications = [
@@ -41,7 +42,7 @@ export default function CertificationsAndBadges() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {certifications.map((cert) => (
             <CustomCard key={cert.id} title={cert.name} description={cert.description}>
-              <img src={cert.image} alt={cert.name} className="w-full h-auto" />
+              <Image width={50} height={50} src={cert.image} alt={cert.name} className="w-full h-auto" />
               <div className="mt-4">
                 <Button onClick={() => { setSelectedCertification(cert); setIsDialogOpen(true); }}>
                   View Certificate
@@ -55,7 +56,7 @@ export default function CertificationsAndBadges() {
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
           {badges.map((badge) => (
             <div key={badge.id} className="flex flex-col items-center text-center">
-              <img src={badge.image} alt={badge.name} className="w-20 h-20 mb-2" />
+              <Image width={50} height={50} src={badge.image} alt={badge.name} className="w-20 h-20 mb-2" />
               <h3 className="font-semibold">{badge.name}</h3>
               <p className="text-sm text-gray-600">{badge.description}</p>
             </div>
@@ -69,7 +70,7 @@ export default function CertificationsAndBadges() {
             <h2 className="text-xl font-semibold">{selectedCertification.name}</h2>
             <p>{selectedCertification.description}</p>
             <div className="py-4">
-              <img src={selectedCertification.image} alt={selectedCertification.name} className="w-full h-auto" />
+              <Image widht={50} height={50} src={selectedCertification.image} alt={selectedCertification.name} className="w-full h-auto" />
             </div>
             <div className="flex justify-end space-x-2">
               <Button variant="outline" onClick={handleShare}>
@@ -96,7 +97,7 @@ export default function CertificationsAndBadges() {
         <div className="space-y-2">
           <p>Total Certifications: {certifications.length}</p>
           <p>Total Badges: {badges.length}</p>
-          <p>Next Achievement: "Meditation Master" - Complete 100 meditation sessions</p>
+          <p>Next Achievement: Meditation Master - Complete 100 meditation sessions</p>
         </div>
       </CustomCard>
     </div>

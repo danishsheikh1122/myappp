@@ -1,3 +1,16 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+      "@next/next/no-assign-module-variable": "off",
+      "react/display-name": "off",
+      "no-invalid-this": "off"  // Optionally ignore 'this' warnings
+  },
+  "overrides": [
+      {
+          "files": ["*.min.js"],
+          "rules": {
+              "no-invalid-this": "off"  // Disable for minified files
+          }
+      }
+  ]
 }

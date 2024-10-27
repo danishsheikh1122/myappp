@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
@@ -33,7 +34,7 @@ const PoseDetails = () => {
       clearInterval(timer);
     }
     return () => clearInterval(timer);
-  }, [isRecording]);
+  }, [isRecording, recordingTime]);
 
   const startRecording = async () => {
     try {
@@ -68,7 +69,9 @@ const PoseDetails = () => {
             {sanskrit_name}
           </h2>
           {url_svg && (
-            <img
+            <Image
+              width={300}
+              height={300}
               src={url_svg}
               alt={sanskrit_name}
               className="mx-auto lg:mx-0 mb-6 w-3/4 lg:w-full max-w-md rounded-lg shadow-md"
