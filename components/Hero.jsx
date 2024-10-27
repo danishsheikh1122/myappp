@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 const Hero = () => {
     return (
-        <div className="bg-gray-100 min-h-screen">
+        <div className="bg-gray-100 min-h-screen w-full overflow-hidden">
 
             {/* Main Content */}
             <main className="flex justify-center items-center flex-col px-6">

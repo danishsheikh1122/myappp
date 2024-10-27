@@ -44,7 +44,7 @@ function Header() {
   }, [isSignedIn]);
 
   return (
-    <header className="bg-gray-100 shadow-md">
+    <header className="bg-gray-100 shadow-md w-full overflow-hidden">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         {/* Logo and title */}
         <div className="flex items-center">
