@@ -2,13 +2,16 @@
 import React from "react";
 import Link from "next/link";
 import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
+import Image from "next/image";
 function Header() {
   const { isSignedIn } = useAuth();
   return (
     <header className="bg-white shadow-md">
       <div className="container mx-auto flex justify-between items-center py-4 px-6">
         <div className="flex items-center">
-          <img
+          <Image
+          width={10}
+          height={14}
             src="/assest/shiva.png"
             alt="Athleticon logo"
             className="h-14 w-10"

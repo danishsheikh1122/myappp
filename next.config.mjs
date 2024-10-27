@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    images: {
+        domains: ['res.cloudinary.com', 'tse2.mm.bing.net','tse3.mm.bing.net'], // Add allowed domains here
+    },
     webpack(config) {
         // Add a rule for loading HTML files
         config.module.rules.push({
