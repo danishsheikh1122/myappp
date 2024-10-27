@@ -26,10 +26,6 @@ import './js/BVHLoader';
 import './js/MMDLoader';
 import './js/aframe-vrm';
 
-// Add these imports for Three.js
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { ColladaLoader } from 'three/examples/jsm/loaders/ColladaLoader.js';
-import { VRButton } from 'three/examples/jsm/webxr/VRButton.js';
 
 
 function VRScene() {
