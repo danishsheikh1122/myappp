@@ -45,6 +45,7 @@ const weeklyBPData = [
 export default function UserDashboard() {
   const { user } = useUser();
   const [points,setPoints] = useState(0);
+  const [profile,setProfile] = useState(0);
   const fetchUserData = async () => {
     try {
       console.log(user.id)
@@ -55,6 +56,7 @@ export default function UserDashboard() {
       } else {
         console.warn('Points not found in the response:', response.data);
       }
+      setProfile(response.data)
     } catch (error) {
       console.error('Error fetching user data:', error);
       toast.error('Failed to fetch user data.');
@@ -119,11 +121,11 @@ JSON format only.`;
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: "Weekly Steps", value: "45,231", progress: 75, icon: <Dumbbell /> },
-              { title: "Average BP ", value: "45", progress: 75, icon: <Dumbbell /> },
-              { title: "Active Minutes", value: "325 min", progress: 65, icon: <Activity /> },
+              { title: "Weekly Steps", value: "231", progress: 75, icon: <Dumbbell /> },
+              { title: "Average BP ", value: profile?.age, progress: 75, icon: <Dumbbell /> },
+              { title: "Screen TIme(min)", value: profile?.screen_time, progress: 65, icon: <Activity /> },
               // { title: "Upcoming Meetings", value: "3", info: "Next: Book Club (Tomorrow)", icon: <Users /> },
-              { title: "Weekly Points", value: "550", progress: 87, info: "80 points to next level", icon: <CreditCard /> },
+              { title: "Weekly Points", value: profile?.points, progress: 87, info: "20 points to next level", icon: <CreditCard /> },
             ].map(({ title, value, progress, info, icon }, index) => (
               <Card key={index}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -208,9 +210,9 @@ JSON format only.`;
               {report && (
                 <div className="mt-6">
                   <span className="text-green-500 font-bold">Congratulations , Here is your Health Report</span>
-                  <h3 className="text-xl font-semibold">Age: 60</h3>
+                  <h3 className="text-xl font-semibold">Age: {profile?.age}</h3>
                   <p className="mb-2">
-                    <strong>Average BP:</strong> 85
+                    <strong>Average BP:</strong> {profile?.bp}
                   </p>
                   <p className="mb-4">
                     <strong>Exercise Frequency:</strong> 4 days/week
