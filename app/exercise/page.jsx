@@ -40,6 +40,7 @@ const ExercisePage = () => {
               <ul className="flex flex-wrap justify-center items-center gap-2 space-y-2 ml-4">
                 {category.poses.map((pose) => (
                     <Link 
+                    key={pose}
                       href={{
                         pathname: `/pose/${pose.id}`,
                         query: {

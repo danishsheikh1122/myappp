@@ -60,12 +60,24 @@ function Header() {
 
         {/* Navigation Links */}
         <nav className="flex space-x-6">
-          <Link href="/" className="text-gray-600">Home</Link>
-          <Link href="/user-dashboard" className="text-gray-600">Dashboard</Link>
-          <Link href="/exercise" className="text-gray-600">Exercises</Link>
-          <Link href="/virtual-meetups" className="text-gray-600">Virtual Meetups</Link>
-          <Link href="/games" className="text-gray-600">Games and Puzzles</Link>
-          <Link href="/certificates" className="text-gray-600">Achievements</Link>
+          <Link href="/" className="text-gray-600">
+            Home
+          </Link>
+          <Link href="/user-dashboard" className="text-gray-600">
+            DashBoard
+          </Link>
+          <Link href="/exercise" className="text-gray-600">
+            Exercises
+          </Link>
+          <Link href="/virtual-meeetups" className="text-gray-600">
+            Virtual Meetups
+          </Link>
+          <Link href="/games" className="text-gray-600">
+            Games and Puzzles
+          </Link>
+          <Link href="/certificates" className="text-gray-600">
+            Achivements
+          </Link>
         </nav>
 
         {/* Sign In/User Button */}
