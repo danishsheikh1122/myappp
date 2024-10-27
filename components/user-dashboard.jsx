@@ -9,7 +9,9 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Bar, BarChart } from "recharts"
 import { Activity, Calendar, CreditCard, Dumbbell, Users, Video } from "lucide-react"
 import { useUser } from '@clerk/nextjs'
+import { chatSession } from "../utils/gemini";
 import Link from 'next/link'
+import toast from "react-hot-toast"
 // Sample data for charts
 const weeklyActivityData = [
   { day: "Mon", steps: 5000, duration: 30 },
@@ -41,10 +43,42 @@ const weeklyBPData = [
 export default function UserDashboard() {
   const { user } = useUser();
   const [activeTab, setActiveTab] = useState("overview");
+  const [report, setReport] = useState("");
+  const handleGenerateReport = async () => {
+    // Proper prompt construction
+    const userInput = `For age: 60, BP: 85, exercise: 4 days/week, provide JSON with:
+1. Yoga: type, benefits, poses, frequency, duration.
+2. Diet: focus, recommendations, meal plan (breakfast, lunch, dinner).
+3. Notes on health advice.
 
+JSON format only.`;
+
+
+    // Send message to chat session and get the result
+    try {
+
+      const result = await chatSession.sendMessage(userInput);
+
+      console.log(result); // Log the entire result
+      let jsonRes = result.response.text()
+        .replace("```json", "")
+        .replace("```", "")
+        .trim(); // Also trim any whitespace
+
+      console.log("Raw JSON Response:", jsonRes); // Log the cleaned response
+      toast.success("Report Generated Successfully");
+      const res = JSON.parse(jsonRes);
+      setReport(res)
+    } catch (error) {
+      toast.error("Error Generated in report")
+    }
+  }
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Welcome, {user?.firstName}!</h1>
+      <div className="w-full flex justify-between items-center">
+        <h1 className="text-3xl font-bold mb-8">Welcome, {user?.firstName}!</h1>
+        <span className="text-green-500 font-bold text-3xl mr-20">100 Points </span>
+      </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
@@ -130,24 +164,95 @@ export default function UserDashboard() {
         <TabsContent value="exercise" className="space-y-4">
           <Card>
             <CardHeader>
-              <CardTitle>Exercise Schedule</CardTitle>
-              <CardDescription>Your personalized weekly exercise plan</CardDescription>
+              <CardTitle>Weekly Report</CardTitle>
+              <CardDescription>Your personalized weekly report</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {["Monday", "Wednesday", "Friday"].map((day) => (
-                  <div key={day} className="bg-muted p-4 rounded-lg">
-                    <h3 className="font-semibold mb-2">{day}</h3>
-                    <ul className="list-disc list-inside">
-                      <li>15 min gentle stretching</li>
-                      <li>20 min walking</li>
-                      <li>10 min balance exercises</li>
+              <div>
+                <button
+                  className="bg-black text-white py-2 px-4 rounded-full"
+                  onClick={handleGenerateReport}
+                >
+                  Generate Report Based on My Activities
+                </button>
+              </div>
+
+              {report && (
+                <div className="mt-6">
+                  <span className="text-green-500 font-bold">Congratulations , Here is your Health Report</span>
+                  <h3 className="text-xl font-semibold">Age: 60</h3>
+                  <p className="mb-2">
+                    <strong>Average BP:</strong> 85
+                  </p>
+                  <p className="mb-4">
+                    <strong>Exercise Frequency:</strong> 4 days/week
+                  </p>
+
+                  <div className="mt-6">
+                    <h4 className="text-lg font-semibold">Yoga Recommendations:</h4>
+                    <p>
+                      <strong>Type:</strong> {report.yoga.type}
+                    </p>
+                    <p>
+                      <strong>Benefits:</strong>
+                      <ul className="list-disc list-inside ml-6 mt-2">
+                        {report.yoga.benefits.map((benefit, index) => (
+                          <li key={index}>{benefit}</li>
+                        ))}
+                      </ul>
+                    </p>
+                    <p>
+                      <strong>Frequency:</strong> {report.yoga.frequency}
+                    </p>
+                    <p>
+                      <strong>Duration:</strong> {report.yoga.duration}
+                    </p>
+                    <ul className="list-disc list-inside ml-6 mt-2">
+                      {report.yoga.poses.map((pose, index) => (
+                        <li key={index}>{pose}</li>
+                      ))}
                     </ul>
                   </div>
-                ))}
-              </div>
+
+                  <div className="mt-6">
+                    <h4 className="text-lg font-semibold">Diet Recommendations:</h4>
+                    <p>
+                      <strong>Focus:</strong> {report.diet.focus}
+                    </p>
+                    <ul className="list-disc list-inside ml-6 mt-2">
+                      {report.diet.recommendations.map((item, index) => (
+                        <li key={index}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-6">
+                    <h5 className="text-md font-semibold">Sample Meal Plan:</h5>
+                    <p>
+                      <strong>Breakfast:</strong> {report.diet.meal_plan.breakfast}
+                    </p>
+                    <p>
+                      <strong>Lunch:</strong> {report.diet.meal_plan.lunch}
+                    </p>
+                    <p>
+                      <strong>Dinner:</strong> {report.diet.meal_plan.dinner}
+                    </p>
+                  </div>
+
+                  <p className="text-sm mt-6 italic">
+                    <strong>Health Advice:</strong>
+                    <ul className="list-disc list-inside ml-6 mt-2">
+                      {report.health_advice.map((advice, index) => (
+                        <li key={index}>{advice}</li>
+                      ))}
+                    </ul>
+                  </p>
+                </div>
+              )}
             </CardContent>
+
           </Card>
+
 
           <Card>
             <CardHeader>
