@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { SignInButton, useAuth, UserButton, useUser } from "@clerk/nextjs";
@@ -12,27 +12,30 @@ function Header() {
 
     const name = user.firstName; // Use first name correctly
     const userId = user.id; // Use first name correctly
-    const email = user.emailAddresses.length > 0 ? user.emailAddresses[0].emailAddress : null; // Get the primary email
-    console.log(user)
-    console.log(name)
-    console.log(email)
+    const email =
+      user.emailAddresses.length > 0
+        ? user.emailAddresses[0].emailAddress
+        : null; // Get the primary email
+    console.log(user);
+    console.log(name);
+    console.log(email);
 
     try {
       // Sending POST request to save user data
-      const response = await axios.post('/api/users', {
+      const response = await axios.post("/api/users", {
         userId,
         name,
-        email
+        email,
       });
 
       if (response.status === 201) {
-        toast.success('User signed in and saved successfully!');
+        toast.success("User signed in and saved successfully!");
       } else {
-        toast.error('User sign-in successful, but there was an issue saving.');
+        toast.error("User sign-in successful, but there was an issue saving.");
       }
     } catch (error) {
-      console.error('Error signing up and saving user:', error);
-      toast.error('Error saving user. Please try again.');
+      console.error("Error signing up and saving user:", error);
+      toast.error("Error saving user. Please try again.");
     }
   };
 
@@ -41,6 +44,7 @@ function Header() {
     if (isSignedIn) {
       handleSignIn();
     }
+    /* trunk-ignore(eslint/react-hooks/exhaustive-deps) */
   }, [isSignedIn]);
 
   return (
@@ -49,8 +53,8 @@ function Header() {
         {/* Logo and title */}
         <div className="flex items-center">
           <Image
-          width={10}
-          height={14}
+            width={10}
+            height={14}
             src="/assest/shiva.png"
             alt="Athleticon logo"
             className="h-14 w-10"

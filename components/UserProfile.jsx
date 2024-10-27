@@ -40,6 +40,7 @@ const UserProfile = () => {
     if (user) {
       fetchUserData();
     }
+  /* trunk-ignore(eslint/react-hooks/exhaustive-deps) */
   }, [user]);
 
   // Update user data
