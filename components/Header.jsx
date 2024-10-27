@@ -22,6 +22,9 @@ function Header() {
           <Link href="/user-dashboard" className="text-gray-600">
             DashBoard
           </Link>
+          <Link href="/exercise" className="text-gray-600">
+            Exercises
+          </Link>
           <Link href="/virtual-meeetups" className="text-gray-600">
             Virtual Meetups
           </Link>
