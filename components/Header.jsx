@@ -32,7 +32,7 @@ function Header() {
             Games and Puzzles
           </Link>
           <Link href="/certificates" className="text-gray-600">
-            Achhivements
+            Achivements
           </Link>
         </nav>
         <div className="flex items-center">
